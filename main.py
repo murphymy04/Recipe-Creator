@@ -18,9 +18,13 @@ def cuisine_clicked(cuisine_choice):
 def meal_clicked(meal_choice):
     recipe_search.meal_type(meal_input=meal_choice)
 
+def search_clicked():
+    recipe_search.query(gui.query.get())
+    recipe_search.search()
 
-gui = GUI(diet_click=diet_clicked, health_click=health_clicked)
 
+gui = GUI(diet_click=diet_clicked, health_click=health_clicked, cuisine_click=cuisine_clicked, meal_click=meal_clicked)
 
+gui.search_button.config(command=search_clicked)
 
 

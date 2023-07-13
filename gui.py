@@ -41,11 +41,36 @@ HEALTH_OPTIONS = [
     "wheat-free"
 ]
 
+CUISINE_OPTIONS = [
+    "American",
+    "Asian",
+    "British",
+    "Caribbean",
+    "Central Europe",
+    "Chinese",
+    "Eastern Europe",
+    "French",
+    "Indian",
+    "Italian",
+    "Japanese",
+    "Mexican",
+    "Middle Eastern",
+    "Nordic",
+    "South American",
+    "South East Asian"
+]
+
+MEAL_OPTIONS = [
+    "Breakfast",
+    "Lunch",
+    "Dinner",
+    "Snack"
+]
 
 class GUI:
     
 
-    def __init__(self, diet_click, health_click):
+    def __init__(self, diet_click, health_click, cuisine_click, meal_click):
         # creating window
         self.window = tk.Tk()
         self.window.title("Recipy")
@@ -67,6 +92,19 @@ class GUI:
         self.health_menu = tk.OptionMenu(self.window, self.health_choice, *HEALTH_OPTIONS, command=health_click)
         self.health_menu.grid(row=2, column=1)
 
-        
-        self.window.mainloop()
+        # cuisine menu
+        self.cuisine_choice = tk.StringVar(self.window)
+        self.cuisine_menu = tk.OptionMenu(self.window, self.cuisine_choice, *CUISINE_OPTIONS, command=cuisine_click)
+        self.cuisine_menu.grid(row=2, column=2)
 
+        # meal menu
+        self.meal_choice = tk.StringVar(self.window)
+        self.meal_menu = tk.OptionMenu(self.window, self.meal_choice, *MEAL_OPTIONS, command=meal_click)
+        self.meal_menu.grid(row=2, column=3)
+
+        # search button
+        self.search_button = tk.Button(text="Go!")
+        self.search_button.grid(row=1, column=5)
+
+        self.window.mainloop()
+        
