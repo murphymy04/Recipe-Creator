@@ -1,4 +1,5 @@
 import tkinter as tk
+from functools import partial
 
 DIET_OPTIONS = [
     "balanced",
@@ -67,44 +68,47 @@ MEAL_OPTIONS = [
     "Snack"
 ]
 
-class GUI:
+
+class Window1:
     
 
-    def __init__(self, diet_click, health_click, cuisine_click, meal_click):
+    def __init__(self, master, diet_click, health_click, cuisine_click, meal_click, recipe_search):
         # creating window
-        self.window = tk.Tk()
-        self.window.title("Recipy")
-        self.width= self.window.winfo_screenwidth()
-        self.height= self.window.winfo_screenheight()
-        self.window.geometry("%dx%d" % (self.width, self.height))
+        self.master = master
+        self.master.title("Recipy")
+        self.width= self.master.winfo_screenwidth()
+        self.height= self.master.winfo_screenheight()
+        self.master.geometry("%dx%d" % (self.width, self.height))
         
         # Entry bar
         self.query = tk.Entry()
         self.query.grid(row=1, column=0, columnspan=4)
 
         # diet dropdown menu
-        self.diet_choice = tk.StringVar(self.window)
-        self.diet_menu = tk.OptionMenu(self.window, self.diet_choice, *DIET_OPTIONS, command=diet_click)
+        self.diet_choice = tk.StringVar(self.master)
+        self.diet_menu = tk.OptionMenu(self.master, self.diet_choice, *DIET_OPTIONS, command=diet_click)
         self.diet_menu.grid(row=2, column=0)
 
         # health menu
-        self.health_choice = tk.StringVar(self.window)
-        self.health_menu = tk.OptionMenu(self.window, self.health_choice, *HEALTH_OPTIONS, command=health_click)
+        self.health_choice = tk.StringVar(self.master)
+        self.health_menu = tk.OptionMenu(self.master, self.health_choice, *HEALTH_OPTIONS, command=health_click)
         self.health_menu.grid(row=2, column=1)
 
         # cuisine menu
-        self.cuisine_choice = tk.StringVar(self.window)
-        self.cuisine_menu = tk.OptionMenu(self.window, self.cuisine_choice, *CUISINE_OPTIONS, command=cuisine_click)
+        self.cuisine_choice = tk.StringVar(self.master)
+        self.cuisine_menu = tk.OptionMenu(self.master, self.cuisine_choice, *CUISINE_OPTIONS, command=cuisine_click)
         self.cuisine_menu.grid(row=2, column=2)
 
         # meal menu
-        self.meal_choice = tk.StringVar(self.window)
-        self.meal_menu = tk.OptionMenu(self.window, self.meal_choice, *MEAL_OPTIONS, command=meal_click)
+        self.meal_choice = tk.StringVar(self.master)
+        self.meal_menu = tk.OptionMenu(self.master, self.meal_choice, *MEAL_OPTIONS, command=meal_click)
         self.meal_menu.grid(row=2, column=3)
 
         # search button
-        self.search_button = tk.Button(text="Go!")
+        self.search_button = tk.Button(text="Go!", command=partial(self.Return_Query, recipe_search))
         self.search_button.grid(row=1, column=5)
-
-        self.window.mainloop()
-        
+    
+    
+    def Return_Query(self, recipe_search):
+        recipe_search.query(input=self.query.get())
+        recipe_search.search()
