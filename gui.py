@@ -91,12 +91,6 @@ class Window1:
         # title
         self.title = tk.Label(self.main_frame, font=("Nexa", 30, "bold"), text="Pantry Pal")
         self.title.pack(anchor="center", pady=(0, 25))
-
-        # image
-        self.attribution = tk.PhotoImage(file="transparent.png")
-        self.canvas = tk.Canvas(self.main_frame, height=50, width=50)
-        self.canvas.create_image(50, 50, image=self.attribution)
-        self.canvas.pack()
         
         # Entry bar
         self.query = tk.Entry(self.main_frame)
