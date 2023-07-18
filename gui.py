@@ -1,5 +1,6 @@
 import tkinter as tk
 from functools import partial
+from PIL import ImageTk, Image
 
 DIET_OPTIONS = [
     "balanced",
@@ -79,51 +80,78 @@ class Window1:
         self.width= self.master.winfo_screenwidth()
         self.height= self.master.winfo_screenheight()
         self.master.geometry("%dx%d" % (self.width, self.height))
+        self.master.config(bg="white")
+        
+        # background image
+        self.image = Image.open("background4.jpg")
+        self.resize = self.image.resize((500, 350))
+        self.bg = ImageTk.PhotoImage(self.resize)
+        self.bg_label = tk.Label(self.master, image=self.bg, border=0)
+        self.bg_label.image = self.bg
+        self.bg_label.grid(column=0, row=0, padx=(150))
 
         # main frame
-        self.main_frame = tk.Frame(self.master)
-        self.main_frame.pack(side=tk.TOP, pady=(self.height/4, 0))
+        self.main_frame = tk.Frame(self.master, bg="white")
+        self.main_frame.grid(column=1, row=0, padx=(50, 100), pady=350)
 
         # side frame
-        self.side_frame = tk.Frame(self.master)
-        self.side_frame.pack(side=tk.RIGHT, padx=(0, 50))
+        self.side_frame = tk.Frame(self.master, highlightthickness=2, highlightbackground="green", bg="white")
+        self.side_frame.grid(column=2, row=0, padx=(100, 0))
 
         # title
-        self.title = tk.Label(self.main_frame, font=("Nexa", 30, "bold"), text="Pantry Pal")
-        self.title.pack(anchor="center", pady=(0, 25))
+        self.title = tk.Label(self.main_frame, font=("Nexa", 30, "bold"), text="Pantry Pal", bg="white")
+        self.title.grid(column=0, row=0, pady=(0, 15))
+
+        # attribution
+        self.image = Image.open("transparent.png")
+        self.attribute = ImageTk.PhotoImage(self.image)
+        self.attribute_label = tk.Label(self.main_frame, image=self.attribute, bg="white")
+        self.attribute_label.grid(column=0, row=2, pady=8)
         
         # Entry bar
-        self.query = tk.Entry(self.main_frame)
-        self.query.pack(side=tk.LEFT)
+        self.query = tk.Entry(self.main_frame, width=50)
+        self.query.insert(0, 'Enter Ingredients; Separate each with "and"')
+        self.query.grid(column=0, row=1)
+
+        # side title
+        self.side_title = tk.Label(self.side_frame, font=("Nexa", 25, "underline", "bold"), text="Filters", bg="white")
+        self.side_title.grid(column=0, row=0, pady=(0, 18))
 
         # diet dropdown menu
+        self.diet_label = tk.Label(self.side_frame, text="Diet Options", bg="white")
+        self.diet_label.grid(column=0, row=1)
         self.diet_choice = tk.StringVar(self.master)
         self.diet_menu = tk.OptionMenu(self.side_frame, self.diet_choice, *DIET_OPTIONS, command=diet_click)
-        #self.diet_menu.grid(row=2, column=0)
-        self.diet_menu.pack()
+        self.diet_menu.config(width=18)
+        self.diet_menu.grid(column=0, row=2, padx=12, pady=(0, 12))
 
-        # health menu
+        # health dropdown menu
+        self.health_label = tk.Label(self.side_frame, text="Health/Allergy Options", bg="white")
+        self.health_label.grid(column=0, row=3)
         self.health_choice = tk.StringVar(self.master)
         self.health_menu = tk.OptionMenu(self.side_frame, self.health_choice, *HEALTH_OPTIONS, command=health_click)
-        #self.health_menu.grid(row=2, column=1)
-        self.health_menu.pack()
+        self.health_menu.config(width=18)
+        self.health_menu.grid(column=0, row=4, padx=12, pady=(0, 12))
 
-        # cuisine menu
+        # cuisine dropdown menu
+        self.cuisine_label = tk.Label(self.side_frame, text="Cuisine Type", bg="white")
+        self.cuisine_label.grid(column=0, row=5)
         self.cuisine_choice = tk.StringVar(self.master)
         self.cuisine_menu = tk.OptionMenu(self.side_frame, self.cuisine_choice, *CUISINE_OPTIONS, command=cuisine_click)
-        #self.cuisine_menu.grid(row=2, column=2)
-        self.cuisine_menu.pack()
+        self.cuisine_menu.config(width=18)
+        self.cuisine_menu.grid(column=0, row=6, padx=12, pady=(0, 12))
 
-        # meal menu
+        # meal dropdown menu
+        self.meal_label = tk.Label(self.side_frame, text="Meal Type", bg="white")
+        self.meal_label.grid(column=0, row=7)
         self.meal_choice = tk.StringVar(self.master)
         self.meal_menu = tk.OptionMenu(self.side_frame, self.meal_choice, *MEAL_OPTIONS, command=meal_click)
-        #self.meal_menu.grid(row=2, column=3)
-        self.meal_menu.pack()
+        self.meal_menu.config(width=18)
+        self.meal_menu.grid(column=0, row=8, padx=12, pady=(0, 12))
 
         # search button
         self.search_button = tk.Button(self.main_frame, text="Go!", command=partial(self.Return_Query, recipe_search))
-        #self.search_button.grid(row=1, column=5)
-        self.search_button.pack(side=tk.LEFT)
+        self.search_button.grid(column=1, row=1, padx=(7, 0))
     
 
     def Return_Query(self, recipe_search):
