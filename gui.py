@@ -149,11 +149,44 @@ class Window1:
         self.meal_menu.config(width=18)
         self.meal_menu.grid(column=0, row=8, padx=12, pady=(0, 12))
 
+        # randomize button
+        self.rand_label = tk.Label(self.side_frame, text="Spice it Up!", bg="white")
+        self.rand_label.grid(column=0, row=9)
+        self.rand_button = tk.Button(self.side_frame, text="Randomize Results", bg="green", command=partial(self.Randomize, recipe_search))
+        self.rand_button.grid(column=0, row=10, padx=12, pady=(0, 12))
+
         # search button
         self.search_button = tk.Button(self.main_frame, text="Go!", command=partial(self.Return_Query, recipe_search))
         self.search_button.grid(column=1, row=1, padx=(7, 0))
     
 
-    def Return_Query(self, recipe_search):
+    def Return_Query(self, recipe_search):        
         recipe_search.query(input=self.query.get())
         recipe_search.search()
+        # destroy window 1
+        self.master.destroy()
+        # create window 2
+        self.new_window = tk.Tk()
+        self.window2 = Window2(self.new_window)
+    
+
+    def Randomize(self, recipe_search):
+        if recipe_search.is_random() == True:
+            self.rand_button.config(bg="red")
+            recipe_search.change_random(False)
+
+        elif recipe_search.is_random() == False:
+            self.rand_button.config(bg="green")
+            recipe_search.change_random(True)
+
+    
+
+class Window2:
+
+     def __init__(self, master):
+        self.master = master
+        self.master.title("Pantry Pal")
+        self.width= self.master.winfo_screenwidth()
+        self.height= self.master.winfo_screenheight()
+        self.master.geometry("%dx%d" % (self.width, self.height))
+        self.master.config(bg="white")

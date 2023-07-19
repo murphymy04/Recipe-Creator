@@ -37,15 +37,17 @@ class RecipeSearch:
     def meal_type(self, meal_input):
         self.PARAMS["mealType"] = meal_input
 
+    
+    def is_random(self):
+        return self.PARAMS["random"]
+    
+    def change_random(self, boolean):
+        self.PARAMS["random"] = boolean
+
 
     def search(self):
         #self.response = requests.get("https://api.edamam.com/api/recipes/v2", params=self.PARAMS)
         #self.response.raise_for_status()
         #self.data = self.response.json()
-        print(self.PARAMS)
-
-
-#response = requests.get("https://api.edamam.com/api/recipes/v2", params=PARAMS)
-#response.raise_for_status()
-#data = response.json()
-#print(data["hits"][0]["recipe"]["ingredientLines"])
+        #print(self.data["hits"][0]["recipe"]["ingredientLines"])
+        pass

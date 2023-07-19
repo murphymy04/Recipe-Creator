@@ -1,6 +1,5 @@
 from recipe_search import RecipeSearch
-from functools import partial
-from gui import Window1
+from gui import Window1, Window2
 import tkinter as tk
 
 recipe_search = RecipeSearch()
@@ -19,7 +18,6 @@ def cuisine_clicked(cuisine_choice):
 
 def meal_clicked(meal_choice):
     recipe_search.meal_type(meal_input=meal_choice)
-
 
 def main():
     root = tk.Tk()
