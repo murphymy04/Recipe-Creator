@@ -162,12 +162,12 @@ class Window1:
 
     def Return_Query(self, recipe_search):        
         recipe_search.query(input=self.query.get())
-        recipe_search.search()
+        self.data = recipe_search.search()
         # destroy window 1
         self.master.destroy()
         # create window 2
         self.new_window = tk.Tk()
-        self.window2 = Window2(self.new_window)
+        self.window2 = Window2(self.new_window, data=self.data)
     
 
     def Randomize(self, recipe_search):
@@ -183,10 +183,40 @@ class Window1:
 
 class Window2:
 
-     def __init__(self, master):
+     def __init__(self, master, data):
+        # creating window
         self.master = master
         self.master.title("Pantry Pal")
         self.width= self.master.winfo_screenwidth()
         self.height= self.master.winfo_screenheight()
         self.master.geometry("%dx%d" % (self.width, self.height))
         self.master.config(bg="white")
+
+        # top bar
+        self.top_frame = tk.Frame(self.master, highlightthickness=2, highlightbackground="green", bg="white", height=self.height/9, width=self.width)
+        self.top_frame.grid(column=0, row=0)
+
+        # results frame
+        self.main_frame = tk.Frame(self.master, bg="white", height=self.height-(self.height/9), width=self.width)
+        self.main_frame.grid(column=0, row=1)
+
+        # organizing data
+        self.titles = []
+        self.ingredients = []
+        self.images = []
+        self.links = []
+        for i in range(9):
+            self.titles.append(data["hits"][i]["recipe"]["label"])
+            self.ingredients.append(data["hits"][i]["recipe"]["ingredientLines"])
+            self.images.append(data["hits"][i]["recipe"]["image"])
+            self.links.append(data["hits"][i]["recipe"]["url"])
+
+        print(self.titles)
+        # results
+        for i in range(3):
+            for j in range(3):
+                self.result_frame = tk.Frame(self.main_frame, bg="white", height=self.height/4.5, width=self.width/3.2 - self.width/96, highlightthickness=2, highlightbackground="green", padx=self.width/96, pady=self.width/96)
+                self.result_frame.grid(column=j, row=i, padx=self.width/96, pady=self.width/96)
+
+                self.title_label = tk.Label(self.result_frame, bg="white", text=self.titles[i+j])
+                self.title_label.pack()

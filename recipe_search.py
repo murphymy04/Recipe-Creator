@@ -46,8 +46,7 @@ class RecipeSearch:
 
 
     def search(self):
-        #self.response = requests.get("https://api.edamam.com/api/recipes/v2", params=self.PARAMS)
-        #self.response.raise_for_status()
-        #self.data = self.response.json()
-        #print(self.data["hits"][0]["recipe"]["ingredientLines"])
-        pass
+        self.response = requests.get("https://api.edamam.com/api/recipes/v2", params=self.PARAMS)
+        self.response.raise_for_status()
+        self.data = self.response.json()
+        return self.data
