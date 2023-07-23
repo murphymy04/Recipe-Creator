@@ -202,12 +202,10 @@ class Window2:
 
         # organizing data
         self.titles = []
-        self.ingredients = []
         self.images = []
         self.links = []
         for i in range(9):
             self.titles.append(data["hits"][i]["recipe"]["label"])
-            self.ingredients.append(data["hits"][i]["recipe"]["ingredientLines"])
             self.images.append(data["hits"][i]["recipe"]["image"])
             self.links.append(data["hits"][i]["recipe"]["url"])
 
