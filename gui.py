@@ -1,6 +1,11 @@
 import tkinter as tk
 from functools import partial
 from PIL import ImageTk, Image
+import requests
+import webbrowser
+
+global page 
+page = 0
 
 DIET_OPTIONS = [
     "balanced",
@@ -194,6 +199,7 @@ class Window2:
 
         # top bar
         self.top_frame = tk.Frame(self.master, highlightthickness=2, highlightbackground="green", bg="white", height=self.height/9, width=self.width)
+        self.top_frame.pack_propagate(0)
         self.top_frame.grid(column=0, row=0)
 
         # results frame
@@ -204,17 +210,56 @@ class Window2:
         self.titles = []
         self.images = []
         self.links = []
-        for i in range(9):
+        for i in range(20):
             self.titles.append(data["hits"][i]["recipe"]["label"])
             self.images.append(data["hits"][i]["recipe"]["image"])
             self.links.append(data["hits"][i]["recipe"]["url"])
 
-        print(self.titles)
-        # results
-        for i in range(3):
-            for j in range(3):
-                self.result_frame = tk.Frame(self.main_frame, bg="white", height=self.height/4.5, width=self.width/3.2 - self.width/96, highlightthickness=2, highlightbackground="green", padx=self.width/96, pady=self.width/96)
-                self.result_frame.grid(column=j, row=i, padx=self.width/96, pady=self.width/96)
+        # new results
+        self.title_label = tk.Label(self.main_frame, bg="white", text=self.titles[page], font=("Nexa", 30, "bold"))
+        self.title_label.pack(pady=50)
 
-                self.title_label = tk.Label(self.result_frame, bg="white", text=self.titles[i+j])
-                self.title_label.pack()
+        self.url = self.images[page]
+        self.im = Image.open(requests.get(self.url, stream=True).raw)
+        self.img = ImageTk.PhotoImage(image=self.im)
+        self.bg_label = tk.Label(self.main_frame, image=self.img)
+        self.bg_label.pack(pady=(0, 20))
+        
+        self.link_button = tk.Button(self.main_frame, text="Go to Recipe", command=partial(self.Link, links=self.links, count=page))
+        self.link_button.pack()
+
+        self.image = Image.open("transparent.png")
+        self.attribute = ImageTk.PhotoImage(self.image)
+        self.attribute_label = tk.Label(self.main_frame, image=self.attribute, bg="white")
+        self.attribute_label.pack(pady=20)
+
+        self.back_button = tk.Button(self.top_frame, text="Previous Recipe", command=self.Previous_Page)
+        self.back_button.pack(side="left", padx=(self.width/2.5, 25))
+        self.title = tk.Label(self.top_frame, font=("Nexa", 30, "bold"), text="Pantry Pal", bg="white")
+        self.title.pack(side="left")
+        self.forward_button = tk.Button(self.top_frame, text="Next Recipe", command=self.Next_Page)
+        self.forward_button.pack(side="left", padx=(25, 0))
+    
+    
+     def Link(self, links, count):
+            webbrowser.open_new(f"{links[count]}")
+     
+     def Next_Page(self):
+         global page
+         page += 1
+         self.url = self.images[page]
+         self.im = Image.open(requests.get(self.url, stream=True).raw)
+         self.img = ImageTk.PhotoImage(image=self.im)
+         self.bg_label.config(image=self.img)
+         self.title_label.config(text=self.titles[page])
+         self.link_button.config(command=partial(self.Link, links=self.links, count=page))
+
+     def Previous_Page(self):
+         global page
+         page -= 1
+         self.url = self.images[page]
+         self.im = Image.open(requests.get(self.url, stream=True).raw)
+         self.img = ImageTk.PhotoImage(image=self.im)
+         self.bg_label.config(image=self.img)
+         self.title_label.config(text=self.titles[page])
+         self.link_button.config(command=partial(self.Link, links=self.links, count=page))
